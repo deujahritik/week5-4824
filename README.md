@@ -1,4 +1,383 @@
 # week5-4824
+
+# A Simple Publisher and Subscriber
+## Create pakages
+*Run the package creation command by going to ros2 ws/src:*
+```
+ros2 pkg create --build-type ament_python py_pubsub
+```
+*Your terminal will display a message confirming the creation of your package py pubsub and all of its necessary files and folders.*
+## 2. Write the publisher node
+
+*You can download the example talker code by going to ros2 ws/src/py pubsub/py pubsub and typing the following command:*
+```
+wget https://raw.githubusercontent.com/ros2/examples/foxy/rclpy/topics/minimal_publisher/examples_rclpy_minimal_publisher/publisher_member_function.py
+```
+*The __init.py file will now be followed by a new one called publisher member function.py. Open the file in your preferred text editor.*
+```
+import rclpy
+from rclpy.node import Node
+
+from std_msgs.msg import String
+
+
+class MinimalPublisher(Node):
+
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        self.publisher_ = self.create_publisher(String, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello World: %d' % self.i
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_publisher = MinimalPublisher()
+
+    rclpy.spin(minimal_publisher)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    minimal_publisher.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+```
+### 2.1 Add dependencies
+*Return one level up to the setup.py, setup.cfg, and package.xml files that have been produced for you in the ros2 ws/src/py pubsub directory.*
+*Open package.xml in your text editor, and make sure the description>, maintainer>, and license> tags are full.*
+```
+<description>Examples of minimal publisher/subscriber using rclpy</description>
+<maintainer email="you@email.com">Your Name</maintainer>
+<license>Apache License 2.0</license>
+```
+*After the lines above that correspond to the import declarations for your node, add the following dependencies:*
+```
+<exec_depend>rclpy</exec_depend>
+<exec_depend>std_msgs</exec_depend>
+```
+*This states that rclpy and std msgs are necessary for the package's code to run.*
+*Make care to save the file.*
+
+### 2.2 Add an entry point
+ *Take a look at setup.py. Make sure to check your package.xml one more time to make sure the maintainer, maintainer email, description, and license columns match:*
+ ```
+maintainer='YourName',
+maintainer_email='you@email.com',
+description='Examples of minimal publisher/subscriber using rclpy',
+license='Apache License 2.0',
+```
+*Add the next line to the entry points field between the console scripts brackets:*
+```
+entry_points={
+        'console_scripts': [
+                'talker = py_pubsub.publisher_member_function:main',
+        ],
+},
+```
+*remember to save.*
+### 2.3 Check setup.cfg
+*The following details should be included by default in the setup.cfg file:*
+```
+[develop]
+script-dir=$base/lib/py_pubsub
+[install]
+install-scripts=$base/lib/py_pubsub
+```
+*Tell setuptools to put your executables in the lib directory so that ros2 run knows where to find them.*
+
+*You could create your package right now, source the local setup files, and launch it if you wanted to see the full system in operation. Let's first, though, establish the subscriber node.*
+## 3 Write the subscriber node
+*The next node can be created by going back to ros2 ws/src/py pubsub/py pubsub. Fill out your terminal with the following code:*
+```
+wget https://raw.githubusercontent.com/ros2/examples/foxy/rclpy/topics/minimal_subscriber/examples_rclpy_minimal_subscriber/subscriber_member_function.py
+```
+*Now, the directory must include the following files:*
+```
+__init__.py  publisher_member_function.py  subscriber_member_function.py
+```
+*Now, Open the subscriber_member_function.py with your text editor.*
+```
+import rclpy
+from rclpy.node import Node
+
+from std_msgs.msg import String
+
+
+class MinimalSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        self.subscription = self.create_subscription(
+            String,
+            'topic',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
+    def listener_callback(self, msg):
+        self.get_logger().info('I heard: "%s"' % msg.data)
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_subscriber = MinimalSubscriber()
+
+    rclpy.spin(minimal_subscriber)
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    minimal_subscriber.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+```
+### 3.1 Add an entry point
+*Reopen setup.py and place the subscriber node's entry point beneath the publisher's entry point. Now, the entry points field should be as follows:*
+```
+entry_points={
+        'console_scripts': [
+                'talker = py_pubsub.publisher_member_function:main',
+                'listener = py_pubsub.subscriber_member_function:main',
+        ],
+},
+```
+*Once the file has been saved, your pub/sub system should be operational.*
+
+## 4 Build and Run
+*The reply and std msgs packages are probably already installed on your ROS 2 system. Before building, it's best practice to run rosdep in the workspace's root directory (ros2 ws) to check for any missing dependencies:*
+```
+rosdep install -i --from-path src --rosdistro foxy -y
+```
+
+*Still in the root of your workspace, ros2_ws, build your new package:*
+```
+colcon build --packages-select py_pubsub
+```
+*Open a new terminal, navigate to ros2_ws, and source the setup files:*
+```
+. install/setup.bash
+```
+*Now run the talker node:*
+```
+ros2 run py_pubsub talker
+```
+*Starting in 0.5 seconds, the terminal should begin sending out info messages as follows:*
+```
+[INFO] [minimal_publisher]: Publishing: "Hello World: 0"
+[INFO] [minimal_publisher]: Publishing: "Hello World: 1"
+[INFO] [minimal_publisher]: Publishing: "Hello World: 2"
+[INFO] [minimal_publisher]: Publishing: "Hello World: 3"
+[INFO] [minimal_publisher]: Publishing: "Hello World: 4"
+```
+*Launch a new terminal, once more source the setup files from ros2 ws, and then launch the listener node:*
+```
+ros2 run py_pubsub listener
+```
+
+*Starting at the publisher's current message count, the listener will begin writing messages to the console as follows:*
+```
+[INFO] [minimal_subscriber]: I heard: "Hello World: 10"
+[INFO] [minimal_subscriber]: I heard: "Hello World: 11"
+[INFO] [minimal_subscriber]: I heard: "Hello World: 12"
+[INFO] [minimal_subscriber]: I heard: "Hello World: 13"
+[INFO] [minimal_subscriber]: I heard: "Hello World: 14"
+```
+
+*Enter Ctrl+C in each terminal to stop the nodes from spinning*
+
+
+
+# A Simple Service and Client
+# 1.Create a package
+
+*Run the package creation command by going to ros2 ws/src:*
+```
+ros2 pkg create --build-type ament_python py_srvcli --dependencies rclpy example_interfaces
+```
+*You will see confirmation from your terminal that your package py srvcli and all of its necessary files and folders have been created.*
+
+## 1.1 Update (package.xml)
+*Because you used the —dependencies option when generating the package, you don't need to manually add dependencies to package.xml.*
+
+*But as always, don't forget to include the description, license information, and the name and email of the maintainer in package.xml.*
+```
+<description>Python client server tutorial</description>
+<maintainer email="you@email.com">Your Name</maintainer>
+<license>Apache License 2.0</license>
+```
+![image](https://user-images.githubusercontent.com/92029196/194781966-10a9ca3f-31f3-437b-bafc-c1bb443f5ff1.png)
+
+## 1.2 Update (setup.py)
+*The following details should be added to the setup.py file's description, maintainer, maintainer email, and license fields:*
+```
+maintainer='Your Name',
+maintainer_email='you@email.com',
+description='Python client server tutorial',
+license='Apache License 2.0',
+```
+![image](https://user-images.githubusercontent.com/92029196/194782022-c13d219e-991b-408f-a2c3-401bb71fbf13.png)
+
+# 2.Write the service node
+*In the ros2 ws/src/py srvcli/py srvcli directory, make a new file called service member function.py, and then paste the following code inside:*
+```
+from example_interfaces.srv import AddTwoInts
+
+import rclpy
+from rclpy.node import Node
+
+
+class MinimalService(Node):
+
+    def __init__(self):
+        super().__init__('minimal_service')
+        self.srv = self.create_service(AddTwoInts, 'add_two_ints', self.add_two_ints_callback)
+
+    def add_two_ints_callback(self, request, response):
+        response.sum = request.a + request.b
+        self.get_logger().info('Incoming request\na: %d b: %d' % (request.a, request.b))
+
+        return response
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_service = MinimalService()
+
+    rclpy.spin(minimal_service)
+
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+## 2.1 Add an entry point
+*For the ros2 run command to be able to run your node, the entry point must be added to setup.py (located in the ros2 ws/src/py srvcli directory).*
+
+*In between the "console scripts" brackets, the following line should be added:*
+```
+'service = py_srvcli.service_member_function:main',
+```
+![image](https://user-images.githubusercontent.com/92029196/194782079-752101c0-c89c-43b3-b3f5-1a4a740d62cd.png)
+
+# 3.Write the client node
+ *In the ros2 ws/src/py srvcli/py srvcli directory, make a new file called client member function.py, and then paste the following code inside:*
+ ```
+ import sys
+
+from example_interfaces.srv import AddTwoInts
+import rclpy
+from rclpy.node import Node
+
+
+class MinimalClientAsync(Node):
+
+    def __init__(self):
+        super().__init__('minimal_client_async')
+        self.cli = self.create_client(AddTwoInts, 'add_two_ints')
+        while not self.cli.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('service not available, waiting again...')
+        self.req = AddTwoInts.Request()
+
+    def send_request(self, a, b):
+        self.req.a = a
+        self.req.b = b
+        self.future = self.cli.call_async(self.req)
+        rclpy.spin_until_future_complete(self, self.future)
+        return self.future.result()
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    minimal_client = MinimalClientAsync()
+    response = minimal_client.send_request(int(sys.argv[1]), int(sys.argv[2]))
+    minimal_client.get_logger().info(
+        'Result of add_two_ints: for %d + %d = %d' %
+        (int(sys.argv[1]), int(sys.argv[2]), response.sum))
+
+    minimal_client.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+
+## 3.1 Add an entry point
+*Similar to how the service node needs an entry point, the client node also needs one.*
+
+*The entry points column in your setup.py file must be formatted as follows*
+```
+entry_points={
+    'console_scripts': [
+        'service = py_srvcli.service_member_function:main',
+        'client = py_srvcli.client_member_function:main',
+    ],
+},
+```
+![image](https://user-images.githubusercontent.com/92029196/194782119-4f465a92-d616-4d66-b3ce-c5566ed04114.png)
+
+# 4.Build and Run
+*Running rosdep in the workspace's root directory (ros2 ws) is a good idea to see if any dependencies are missing before building:*
+```
+rosdep install -i --from-path src --rosdistro foxy -y
+```
+*Go back to ros2 ws, the workspace's root, and create your new package:*
+
+```
+colcon build --packages-select py_srvcli
+```
+*Open a new terminal, navigate to ros2_ws, and source the setup files:*
+```
+. install/setup.bash
+```
+*Run the service node right now:*
+```
+ros2 run py_srvcli service
+```
+*The node will hold off until the client makes a request.*
+
+*Re-source the setup files from ros2 ws in a new terminal. The client node, any two integers, and a space between them.*
+```
+ros2 run py_srvcli client 2 3
+```
+*If you chose options 2 and 3 as an illustration, the customer would receive a response similar to this:*
+```
+[INFO] [minimal_client_async]: Result of add_two_ints: for 2 + 3 = 5
+```
+*You should return to the terminal where your service node is running. As you can see, it published the following log statements after receiving the request:*
+```
+[INFO] [minimal_service]: Incoming request
+a: 2 b: 3
+```
+*Ctrl+C will stop the nodes from rotating in each terminal.*
+
+
+
+
+# Creating custom msg and srv files
+
 # 1. creating package
 *Run the package creation command by going to ros2 ws/src:*
 ```
