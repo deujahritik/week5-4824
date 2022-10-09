@@ -68,6 +68,8 @@ if __name__ == '__main__':
 <exec_depend>rclpy</exec_depend>
 <exec_depend>std_msgs</exec_depend>
 ```
+![image](https://user-images.githubusercontent.com/92029196/194782625-b48ed859-f292-4952-b0ee-cad1bca4e0b3.png)
+
 *This states that rclpy and std msgs are necessary for the package's code to run.*
 *Make care to save the file.*
 
@@ -87,6 +89,8 @@ entry_points={
         ],
 },
 ```
+![image](https://user-images.githubusercontent.com/92029196/194782648-5dcffe44-d698-4552-95f2-4995b1ed1488.png)
+
 *remember to save.*
 ### 2.3 Check setup.cfg
 *The following details should be included by default in the setup.cfg file:*
@@ -158,6 +162,8 @@ entry_points={
         ],
 },
 ```
+![image](https://user-images.githubusercontent.com/92029196/194782688-8af5689f-12f4-4e4c-8c48-b63ecc9b50b0.png)
+
 *Once the file has been saved, your pub/sub system should be operational.*
 
 ## 4 Build and Run
