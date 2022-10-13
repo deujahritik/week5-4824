@@ -177,15 +177,20 @@ entry_points={
 *Once the file has been saved, your pub/sub system should be operational.*
 
 ## 4 Build and Run
-*The reply and std msgs packages are probably already installed on your ROS 2 system. Before building, it's best practice to run rosdep in the workspace's root directory (ros2 ws) to check for any missing dependencies:*
+*The `rclpy` and `std msgs` packages are probably already installed on your ROS 2 system. Before building, it's best practice to run `rosdep` in the workspace's root directory (`ros2 ws`) to check for any missing dependencies:*
 ```
 rosdep install -i --from-path src --rosdistro foxy -y
 ```
+<img width="353" alt="Screenshot_13" src="https://user-images.githubusercontent.com/92029196/195639348-065d9849-220c-425b-8e86-b38952370b23.png">
+
 
 *Still in the root of your workspace, ros2_ws, build your new package:*
 ```
 colcon build --packages-select py_pubsub
 ```
+<img width="323" alt="Screenshot_14" src="https://user-images.githubusercontent.com/92029196/195639411-29ffa209-3b09-4f18-b679-40ed01f0bbd0.png">
+
+
 *Open a new terminal, navigate to ros2_ws, and source the setup files:*
 ```
 . install/setup.bash
@@ -194,6 +199,7 @@ colcon build --packages-select py_pubsub
 ```
 ros2 run py_pubsub talker
 ```
+
 *Starting in 0.5 seconds, the terminal should begin sending out info messages as follows:*
 ```
 [INFO] [minimal_publisher]: Publishing: "Hello World: 0"
@@ -202,6 +208,8 @@ ros2 run py_pubsub talker
 [INFO] [minimal_publisher]: Publishing: "Hello World: 3"
 [INFO] [minimal_publisher]: Publishing: "Hello World: 4"
 ```
+<img width="364" alt="Screenshot_17" src="https://user-images.githubusercontent.com/92029196/195639788-76076bba-c626-4150-b9ad-a71267789669.png">
+
 *Launch a new terminal, once more source the setup files from ros2 ws, and then launch the listener node:*
 ```
 ros2 run py_pubsub listener
@@ -215,6 +223,8 @@ ros2 run py_pubsub listener
 [INFO] [minimal_subscriber]: I heard: "Hello World: 13"
 [INFO] [minimal_subscriber]: I heard: "Hello World: 14"
 ```
+<img width="350" alt="Screenshot_16" src="https://user-images.githubusercontent.com/92029196/195639859-f8b83138-9be7-4992-acaa-9f22a59313bf.png">
+
 
 *Enter Ctrl+C in each terminal to stop the nodes from spinning*
 
