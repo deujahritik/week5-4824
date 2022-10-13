@@ -360,7 +360,7 @@ if __name__ == '__main__':
 *Similar to how the service node needs an entry point, the client node also needs one.*
 
 *The entry points column in your setup.py file must be formatted as follows*
-```
+```python
 entry_points={
     'console_scripts': [
         'service = py_srvcli.service_member_function:main',
@@ -381,14 +381,20 @@ rosdep install -i --from-path src --rosdistro foxy -y
 ```
 colcon build --packages-select py_srvcli
 ```
+![image](https://user-images.githubusercontent.com/92029196/195647202-d6a0fb36-28b5-482c-91c2-c03216de1ad3.png)
+
+
 *Open a new terminal, navigate to ros2_ws, and source the setup files:*
 ```
 . install/setup.bash
 ```
+
+
 *Run the service node right now:*
 ```
 ros2 run py_srvcli service
 ```
+
 *The node will hold off until the client makes a request.*
 
 *Re-source the setup files from ros2 ws in a new terminal. The client node, any two integers, and a space between them.*
@@ -399,11 +405,16 @@ ros2 run py_srvcli client 2 3
 ```
 [INFO] [minimal_client_async]: Result of add_two_ints: for 2 + 3 = 5
 ```
+![image](https://user-images.githubusercontent.com/92029196/195652511-3e458ed8-d01b-4817-9f1b-9f716716455e.png)
+
 *You should return to the terminal where your service node is running. As you can see, it published the following log statements after receiving the request:*
 ```
 [INFO] [minimal_service]: Incoming request
 a: 2 b: 3
 ```
+![image](https://user-images.githubusercontent.com/92029196/195652696-ae85081a-9a47-4bc0-813a-7fcae1be92ef.png)
+
+
 *Ctrl+C will stop the nodes from rotating in each terminal.*
 
 
