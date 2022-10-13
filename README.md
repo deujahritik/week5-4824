@@ -721,31 +721,9 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 ```
- *CMakeLists.txt:*
 
-*Add the following lines (C++ only):*
-```
-#...
 
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(tutorial_interfaces REQUIRED)        # CHANGE
 
-add_executable(server src/add_two_ints_server.cpp)
-ament_target_dependencies(server
-  rclcpp tutorial_interfaces)                      #CHANGE
-
-add_executable(client src/add_two_ints_client.cpp)
-ament_target_dependencies(client
-  rclcpp tutorial_interfaces)                      #CHANGE
-
-install(TARGETS
-  server
-  client
-  DESTINATION lib/${PROJECT_NAME})
-
-ament_package()
-```
 *package.xml:*
 
 *Add the following line:*
@@ -756,14 +734,16 @@ ament_package()
 ```
 colcon build --packages-select py_srvcli
 ```
-*On Windows:*
-```
-colcon build --merge-install --packages-select py_srvcli
-```
+![image](https://user-images.githubusercontent.com/92029196/195662925-319a384c-fb50-4f39-8f73-fab6d0964556.png)
+
+
 *Then open two new terminals, source ros2_ws in each, and run:*
 ```
 ros2 run py_srvcli service
 ```
+![image](https://user-images.githubusercontent.com/92029196/195662640-734a7137-8a37-4ff3-b96c-dbf0a3718f5b.png)
+
 ```
 ros2 run py_srvcli client 2 3 1
 ```
+![image](https://user-images.githubusercontent.com/92029196/195662735-c0a79e85-dee6-4dbc-85b8-faf81c540ee9.png)
