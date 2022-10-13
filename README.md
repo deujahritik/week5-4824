@@ -238,6 +238,8 @@ ros2 run py_pubsub listener
 ```
 ros2 pkg create --build-type ament_python py_srvcli --dependencies rclpy example_interfaces
 ```
+![image](https://user-images.githubusercontent.com/92029196/195643634-11e179e3-3eae-4875-94cc-0c0f4aed8b06.png)
+
 *You will see confirmation from your terminal that your package py srvcli and all of its necessary files and folders have been created.*
 
 ## 1.1 Update (package.xml)
@@ -249,7 +251,9 @@ ros2 pkg create --build-type ament_python py_srvcli --dependencies rclpy example
 <maintainer email="you@email.com">Your Name</maintainer>
 <license>Apache License 2.0</license>
 ```
-![image](https://user-images.githubusercontent.com/92029196/194781966-10a9ca3f-31f3-437b-bafc-c1bb443f5ff1.png)
+![image](https://user-images.githubusercontent.com/92029196/195644483-a360ed50-73c8-430f-a2a5-28569db747a6.png)
+
+
 
 ## 1.2 Update (setup.py)
 *The following details should be added to the setup.py file's description, maintainer, maintainer email, and license fields:*
@@ -259,7 +263,8 @@ maintainer_email='you@email.com',
 description='Python client server tutorial',
 license='Apache License 2.0',
 ```
-![image](https://user-images.githubusercontent.com/92029196/194782022-c13d219e-991b-408f-a2c3-401bb71fbf13.png)
+![image](https://user-images.githubusercontent.com/92029196/195644972-6dd981dc-e9ee-46da-85f7-4aa81ab4c861.png)
+
 
 # 2.Write the service node
 *In the ros2 ws/src/py srvcli/py srvcli directory, make a new file called service member function.py, and then paste the following code inside:*
@@ -304,11 +309,11 @@ if __name__ == '__main__':
 ```
 'service = py_srvcli.service_member_function:main',
 ```
-![image](https://user-images.githubusercontent.com/92029196/194782079-752101c0-c89c-43b3-b3f5-1a4a740d62cd.png)
+![image](https://user-images.githubusercontent.com/92029196/195645590-0f408c5b-7748-472b-83dc-3da81a21a177.png)
 
 # 3.Write the client node
  *In the ros2 ws/src/py srvcli/py srvcli directory, make a new file called client member function.py, and then paste the following code inside:*
- ```
+ ```python
  import sys
 
 from example_interfaces.srv import AddTwoInts
@@ -363,7 +368,8 @@ entry_points={
     ],
 },
 ```
-![image](https://user-images.githubusercontent.com/92029196/194782119-4f465a92-d616-4d66-b3ce-c5566ed04114.png)
+![image](https://user-images.githubusercontent.com/92029196/195646514-18df638f-3852-4fd9-bdbb-03ddfdcee3f8.png)
+
 
 # 4.Build and Run
 *Running rosdep in the workspace's root directory (ros2 ws) is a good idea to see if any dependencies are missing before building:*
