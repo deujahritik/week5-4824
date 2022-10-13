@@ -6,6 +6,8 @@
 ```
 ros2 pkg create --build-type ament_python py_pubsub
 ```
+![image](https://user-images.githubusercontent.com/92029196/195634124-d09146ef-b6ae-482a-8286-8ea10507d12d.png)
+
 *Your terminal will display a message confirming the creation of your package py pubsub and all of its necessary files and folders.*
 ## 2. Write the publisher node
 
@@ -13,6 +15,9 @@ ros2 pkg create --build-type ament_python py_pubsub
 ```
 wget https://raw.githubusercontent.com/ros2/examples/foxy/rclpy/topics/minimal_publisher/examples_rclpy_minimal_publisher/publisher_member_function.py
 ```
+![image](https://user-images.githubusercontent.com/92029196/195634751-3449e77f-896e-44db-b8a9-f457d228bb7c.png)
+
+
 *The __init.py file will now be followed by a new one called publisher member function.py. Open the file in your preferred text editor.*
 ```
 import rclpy
@@ -68,10 +73,11 @@ if __name__ == '__main__':
 <exec_depend>rclpy</exec_depend>
 <exec_depend>std_msgs</exec_depend>
 ```
-![image](https://user-images.githubusercontent.com/92029196/194782625-b48ed859-f292-4952-b0ee-cad1bca4e0b3.png)
+<img width="413" alt="Screenshot_7" src="https://user-images.githubusercontent.com/92029196/195635287-a2a36901-8bc8-43c2-ba04-353dfed754a3.png">
+
 
 *This states that rclpy and std msgs are necessary for the package's code to run.*
-*Make care to save the file.*
+*Remember to save the file.*
 
 ### 2.2 Add an entry point
  *Take a look at setup.py. Make sure to check your package.xml one more time to make sure the maintainer, maintainer email, description, and license columns match:*
@@ -89,9 +95,10 @@ entry_points={
         ],
 },
 ```
-![image](https://user-images.githubusercontent.com/92029196/194782648-5dcffe44-d698-4552-95f2-4995b1ed1488.png)
+<img width="406" alt="Screenshot_8" src="https://user-images.githubusercontent.com/92029196/195635587-5b293e3a-cedf-46c7-b6ae-3a5b2d76fbbb.png">
 
-*remember to save.*
+
+*Remember to save.*
 ### 2.3 Check setup.cfg
 *The following details should be included by default in the setup.cfg file:*
 ```
@@ -108,6 +115,8 @@ install-scripts=$base/lib/py_pubsub
 ```
 wget https://raw.githubusercontent.com/ros2/examples/foxy/rclpy/topics/minimal_subscriber/examples_rclpy_minimal_subscriber/subscriber_member_function.py
 ```
+<img width="366" alt="Screenshot_11" src="https://user-images.githubusercontent.com/92029196/195636023-67247b32-c893-4c49-bbc9-e481426fd110.png">
+
 *Now, the directory must include the following files:*
 ```
 __init__.py  publisher_member_function.py  subscriber_member_function.py
@@ -162,7 +171,8 @@ entry_points={
         ],
 },
 ```
-![image](https://user-images.githubusercontent.com/92029196/194782688-8af5689f-12f4-4e4c-8c48-b63ecc9b50b0.png)
+<img width="428" alt="Screenshot_12" src="https://user-images.githubusercontent.com/92029196/195635866-a8052547-c91d-431e-ba85-c1ee3b434488.png">
+
 
 *Once the file has been saved, your pub/sub system should be operational.*
 
